@@ -194,6 +194,7 @@ SELECT * FROM inthome_sales ORDER BY order_date;
 SELECT *
 FROM inthome_sales;
 
+
 -- [Data Analysis]
 -- Monthly Sales Performance Breakdown (Q4 2021)
 SELECT 
@@ -204,6 +205,7 @@ FROM inthome_sales
 WHERE EXTRACT(QUARTER FROM order_date) = 4 AND EXTRACT(YEAR FROM order_date) = 2021
 GROUP BY 1, EXTRACT(MONTH FROM order_date)
 ORDER BY EXTRACT(MONTH FROM order_date);
+
 
 -- Seasonality Analysis: Average Sales by Day of the Week
 -- Comparing Peak Season (Q4 2021) vs Post-Season (Q1 2022)
@@ -240,3 +242,40 @@ SELECT
 	,2) AS "%Growth"
 FROM quarterly_sales
 ;
+
+
+-- Evaluating sales trend by calculating 7-Day Moving Average to minimise the daily sales noise (Q4 2021 to Q1 2022)
+-- Using Windows Function(7-Day Moving Average) to calculate average of current day + previous 6 days
+SELECT
+	order_date,
+	total_revenue AS daily_revenue,
+	ROUND(
+		AVG(total_revenue) OVER (
+		ORDER BY order_date
+		ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+	),2) AS seven_day_moving_avg
+FROM inthome_sales
+WHERE order_date BETWEEN '2021-10-01' AND '2022-03-31'
+ORDER BY order_date;
+
+
+-- Conversion Efficiency by Day of Week
+-- Evaluating conversion rate(CVR) and revenue per visitor(RPV) by day of week
+-- To improve and optimise Ad bidding strategy
+
+SELECT
+	TO_CHAR(order_date, 'FMDay') AS day_name,
+	SUM(visitors) AS total_visitors,
+	SUM(total_orders) AS total_orders,
+	SUM(total_revenue) AS total_revenue,
+	-- CVR
+	ROUND(
+		SUM(total_orders)::NUMERIC / NULLIF(SUM(visitors),0) *100
+		, 2) AS conversion_rate_percent,
+	-- RPV
+	ROUND(
+		SUM(total_revenue) / NULLIF(SUM(visitors),0)
+		, 2) AS revenue_per_visitors
+FROM inthome_sales
+GROUP BY 1, EXTRACT(ISODOW FROM order_date)
+ORDER BY EXTRACT(ISODOW FROM order_date);
