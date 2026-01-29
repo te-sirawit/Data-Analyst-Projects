@@ -196,15 +196,17 @@ FROM inthome_sales;
 
 
 -- [Data Analysis]
--- Monthly Sales Performance Breakdown (Q4 2021)
-SELECT 
+-- Monthly Sales Performance Breakdown (Q4 2021 to Q1 2022)
+SELECT
+	TO_CHAR(DATE_TRUNC('quarter', order_date),'YYYY-"Q"Q') AS quarter,
 	TO_CHAR(order_date, 'Month') AS month, 
 	SUM(total_revenue) AS total_revenue,
 	SUM(total_orders) AS total_orders
 FROM inthome_sales
 WHERE EXTRACT(QUARTER FROM order_date) = 4 AND EXTRACT(YEAR FROM order_date) = 2021
-GROUP BY 1, EXTRACT(MONTH FROM order_date)
-ORDER BY EXTRACT(MONTH FROM order_date);
+	OR EXTRACT(QUARTER FROM order_date) = 1 AND EXTRACT(YEAR FROM order_date) = 2022
+GROUP BY 1,2, EXTRACT(MONTH FROM order_date)
+ORDER BY 1,EXTRACT(MONTH FROM order_date);
 
 
 -- Seasonality Analysis: Average Sales by Day of the Week
@@ -212,8 +214,8 @@ ORDER BY EXTRACT(MONTH FROM order_date);
 -- Analysing customer shopping routine
 SELECT
 	CASE
-		WHEN order_date BETWEEN '2021-10-01' AND '2021-12-31' THEN 'Q4_2021'
-		WHEN order_date BETWEEN '2022-01-01' AND '2022-03-31' THEN 'Q1_2022'
+		WHEN order_date BETWEEN '2021-10-01' AND '2021-12-31' THEN '2021_Q4'
+		WHEN order_date BETWEEN '2022-01-01' AND '2022-03-31' THEN '2022_Q1'
 	END AS period,
 	TO_CHAR(order_date, 'FMDay') AS day_name,
 	ROUND(AVG(total_revenue),2) AS avg_daily_sales
