@@ -5,6 +5,8 @@
 -- Who are our most valuable customers (VIP) and who is at risk of churning?
 -- We want to segment customers based on Recency, Frequency, and Monetary (RFM) value.
 
+SELECT *
+FROM order_all_real;
 
 -- 1. Calculate RFM values (Recency, Frequency, Monetary) by buyer_username
 WITH buyer_rfm AS (

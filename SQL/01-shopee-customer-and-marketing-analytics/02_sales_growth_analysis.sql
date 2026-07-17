@@ -22,7 +22,7 @@ WITH monthly_sales AS (
 		1
 )
 
--- 2.Calculate MoM sales growth(%) and cummulative revenue over time
+-- 2.Calculate MoM sales growth(%) and cumulative revenue over time
 SELECT
 	month,
 	total_sales,
