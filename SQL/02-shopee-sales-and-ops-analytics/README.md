@@ -1,7 +1,7 @@
-# IntHome E-Commerce Performance Analysis
+# Shopee Sales & Operations Analytics
 
 ## 📌 Project Overview
-This project focuses on extracting, transforming, and analyzing e-commerce sales data for **IntHome** from Q4 2021 to Q1 2022. The objective is to monitor sales performance, understand customer shopping behavior, and evaluate conversion efficiency to optimize future business strategies.
+This project focuses on extracting, transforming, and analyzing e-commerce sales data for an active **Shopee Store** from Q4 2021 to Q1 2022. The objective is to monitor sales performance, understand customer shopping behavior, and evaluate conversion efficiency to optimize future business strategies and operational readiness.
 
 ## 🛠️ Tech Stack & Skills Demonstrated
 - **Database:** PostgreSQL
