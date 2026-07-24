@@ -19,7 +19,7 @@ Real-world data is rarely clean. This project demonstrates the ability to ingest
    - Cleansed numerical data by removing thousands separators (`REPLACE(..., ',', '')`).
    - Standardized date formats using `TO_DATE()`.
    - Casted raw strings into appropriate `NUMERIC` and `INTEGER` data types.
-3. **Load:** Inserted the clean, transformed data into the master `inthome_sales` table.
+3. **Load:** Inserted the clean, transformed data into the master `shopee_sales` table.
 
 ---
 

@@ -3,8 +3,8 @@
 -- Configure date style to ISO (Day-Month-Year) to match CSV format in Shopee data
 SET datestyle = 'ISO, DMY';
 -- Creating master table for clean data
-DROP TABLE IF EXISTS inthome_sales;
-CREATE TABLE inthome_sales (
+DROP TABLE IF EXISTS shopee_sales;
+CREATE TABLE shopee_sales (
 	order_date DATE,
 	total_revenue NUMERIC(10,2),
     total_orders INTEGER,
@@ -15,8 +15,8 @@ CREATE TABLE inthome_sales (
 
 -- [STAGING AREA]
 -- Create temporary staging table using text data type to prepare for ETL process 
-DROP TABLE IF EXISTS inthome_sales_staging;
-CREATE TABLE inthome_sales_staging (
+DROP TABLE IF EXISTS shopee_sales_staging;
+CREATE TABLE shopee_sales_staging (
     order_date TEXT,
     total_revenue TEXT,
     total_orders TEXT,
@@ -29,17 +29,17 @@ CREATE TABLE inthome_sales_staging (
 -- [EXTRACT]
 -- Import CSV file from source to the database in staging area
 -- Clear staging area
-TRUNCATE TABLE inthome_sales_staging;
+TRUNCATE TABLE shopee_sales_staging;
 -- Import sales data : October 2021
-COPY inthome_sales_staging
+COPY shopee_sales_staging
 FROM './dataset/int.hometh.shopee-shop-stats.20211001-20211031.csv'
 DELIMITER ','
 CSV HEADER;
 
 
 -- [TRANSFORM & LOAD]
--- Clean the data (remove commas in data) and insert it to the master table (inthome_sales)
-INSERT INTO inthome_sales (
+-- Clean the data (remove commas in data) and insert it to the master table (shopee_sales)
+INSERT INTO shopee_sales (
     order_date,
     total_revenue,
     total_orders,
@@ -54,20 +54,20 @@ SELECT
     REPLACE(avg_order_value, ',', '')::NUMERIC(10,2),
     REPLACE(page_views, ',', '')::INTEGER,
     REPLACE(visitors, ',', '')::INTEGER
-FROM inthome_sales_staging;
+FROM shopee_sales_staging;
 
 
 -- [IMPORT REMAINING DATA]
 -- Repeat the ETL process for the remaining month
 -- Import sales data : November 2021
-TRUNCATE TABLE inthome_sales_staging;
+TRUNCATE TABLE shopee_sales_staging;
 
-COPY inthome_sales_staging
+COPY shopee_sales_staging
 FROM './dataset/int.hometh.shopee-shop-stats.20211101-20211130.csv'
 DELIMITER ','
 CSV HEADER;
 
-INSERT INTO inthome_sales (
+INSERT INTO shopee_sales (
     order_date,
     total_revenue,
     total_orders,
@@ -82,18 +82,18 @@ SELECT
     REPLACE(avg_order_value, ',', '')::NUMERIC(10,2),
     REPLACE(page_views, ',', '')::INTEGER,
     REPLACE(visitors, ',', '')::INTEGER
-FROM inthome_sales_staging;
+FROM shopee_sales_staging;
 
 
 -- Import sales data : December 2021
-TRUNCATE TABLE inthome_sales_staging;
+TRUNCATE TABLE shopee_sales_staging;
 
-COPY inthome_sales_staging
+COPY shopee_sales_staging
 FROM './dataset/int.hometh.shopee-shop-stats.20211201-20211231.csv'
 DELIMITER ','
 CSV HEADER;
 
-INSERT INTO inthome_sales (
+INSERT INTO shopee_sales (
     order_date,
     total_revenue,
     total_orders,
@@ -108,18 +108,18 @@ SELECT
     REPLACE(avg_order_value, ',', '')::NUMERIC(10,2),
     REPLACE(page_views, ',', '')::INTEGER,
     REPLACE(visitors, ',', '')::INTEGER
-FROM inthome_sales_staging;
+FROM shopee_sales_staging;
 
 
 -- Import sales data : January 2022
-TRUNCATE TABLE inthome_sales_staging;
+TRUNCATE TABLE shopee_sales_staging;
 
-COPY inthome_sales_staging
+COPY shopee_sales_staging
 FROM './dataset/int.hometh.shopee-shop-stats.20220101-20220131.csv'
 DELIMITER ','
 CSV HEADER;
 
-INSERT INTO inthome_sales (
+INSERT INTO shopee_sales (
     order_date,
     total_revenue,
     total_orders,
@@ -134,18 +134,18 @@ SELECT
     REPLACE(avg_order_value, ',', '')::NUMERIC(10,2),
     REPLACE(page_views, ',', '')::INTEGER,
     REPLACE(visitors, ',', '')::INTEGER
-FROM inthome_sales_staging;
+FROM shopee_sales_staging;
 
 
 -- Import sales data : February 2022
-TRUNCATE TABLE inthome_sales_staging;
+TRUNCATE TABLE shopee_sales_staging;
 
-COPY inthome_sales_staging
+COPY shopee_sales_staging
 FROM './dataset/int.hometh.shopee-shop-stats.20220201-20220228.csv'
 DELIMITER ','
 CSV HEADER;
 
-INSERT INTO inthome_sales (
+INSERT INTO shopee_sales (
     order_date,
     total_revenue,
     total_orders,
@@ -160,18 +160,18 @@ SELECT
     REPLACE(avg_order_value, ',', '')::NUMERIC(10,2),
     REPLACE(page_views, ',', '')::INTEGER,
     REPLACE(visitors, ',', '')::INTEGER
-FROM inthome_sales_staging;
+FROM shopee_sales_staging;
 
 
 -- Import sales data : March 2022
-TRUNCATE TABLE inthome_sales_staging;
+TRUNCATE TABLE shopee_sales_staging;
 
-COPY inthome_sales_staging
+COPY shopee_sales_staging
 FROM './dataset/int.hometh.shopee-shop-stats.20220301-20220331.csv'
 DELIMITER ','
 CSV HEADER;
 
-INSERT INTO inthome_sales (
+INSERT INTO shopee_sales (
     order_date,
     total_revenue,
     total_orders,
@@ -186,13 +186,13 @@ SELECT
     REPLACE(avg_order_value, ',', '')::NUMERIC(10,2),
     REPLACE(page_views, ',', '')::INTEGER,
     REPLACE(visitors, ',', '')::INTEGER
-FROM inthome_sales_staging;
+FROM shopee_sales_staging;
 
 
 -- Checking all imported data
-SELECT * FROM inthome_sales ORDER BY order_date;
+SELECT * FROM shopee_sales ORDER BY order_date;
 SELECT *
-FROM inthome_sales;
+FROM shopee_sales;
 
 
 -- [Data Analysis]
@@ -202,7 +202,7 @@ SELECT
 	TO_CHAR(order_date, 'Month') AS month, 
 	SUM(total_revenue) AS total_revenue,
 	SUM(total_orders) AS total_orders
-FROM inthome_sales
+FROM shopee_sales
 WHERE EXTRACT(QUARTER FROM order_date) = 4 AND EXTRACT(YEAR FROM order_date) = 2021
 	OR EXTRACT(QUARTER FROM order_date) = 1 AND EXTRACT(YEAR FROM order_date) = 2022
 GROUP BY 1,2, EXTRACT(MONTH FROM order_date)
@@ -219,7 +219,7 @@ SELECT
 	END AS period,
 	TO_CHAR(order_date, 'FMDay') AS day_name,
 	ROUND(AVG(total_revenue),2) AS avg_daily_sales
-FROM inthome_sales
+FROM shopee_sales
 WHERE 
 	order_date BETWEEN '2021-10-01' AND '2022-03-31'
 GROUP BY 1, 2, EXTRACT(ISODOW FROM order_date)
@@ -232,7 +232,7 @@ WITH quarterly_sales AS (
 SELECT
 	DATE_TRUNC('quarter', order_date) AS quarter_start,
 	SUM(total_revenue) AS current_sales
-FROM inthome_sales
+FROM shopee_sales
 GROUP BY 1
 )
 SELECT
@@ -256,7 +256,7 @@ SELECT
 		ORDER BY order_date
 		ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
 	),2) AS seven_day_moving_avg
-FROM inthome_sales
+FROM shopee_sales
 WHERE order_date BETWEEN '2021-10-01' AND '2022-03-31'
 ORDER BY order_date;
 
@@ -278,6 +278,6 @@ SELECT
 	ROUND(
 		SUM(total_revenue) / NULLIF(SUM(visitors),0)
 		, 2) AS revenue_per_visitors
-FROM inthome_sales
+FROM shopee_sales
 GROUP BY 1, EXTRACT(ISODOW FROM order_date)
 ORDER BY EXTRACT(ISODOW FROM order_date);
