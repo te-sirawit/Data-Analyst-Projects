@@ -1,166 +1,94 @@
-# 📊 Mortgage Capital Markets Dashboard
+# 📊 Mortgage Capital Markets Analytics
+**End-to-End Data Pipeline & Interactive Power BI Dashboard**
 
-An advanced Power BI dashboard analyzing mortgage loan portfolios from a **Secondary Market (Capital Markets)** perspective. Covers Best Execution pricing, Risk & Underwriting metrics, Pipeline operational efficiency, and 30-year Loan Amortization projections.
+> **🚀 Live Interactive Dashboard:** 
+> You can interact with the live dashboard directly here: **[View Mortgage Capital Markets Dashboard](https://app.powerbi.com/view?r=eyJrIjoiY2U5Y2Q4OGMtODBlMy00ZTk3LWJhNDItNWQzODA5ZDZjYTZjIiwidCI6IjQ0ZTE2M2UzLTQxYzctNDg1Ny05YWJlLWNlMzdiNDdlNTExNiIsImMiOjEwfQ%3D%3D)**
 
-**🔗 [View Live Dashboard](https://app.powerbi.com/view?r=eyJrIjoiY2U5Y2Q4OGMtODBlMy00ZTk3LWJhNDItNWQzODA5ZDZjYTZjIiwidCI6IjQ0ZTE2M2UzLTQxYzctNDg1Ny05YWJlLWNlMzdiNDdlNTExNiIsImMiOjEwfQ%3D%3D)**
+![Executive Summary Preview](assets/page1_executive_summary.png)
+
+## 📌 Project Overview
+This project showcases an advanced Power BI analytical solution designed to evaluate mortgage loan portfolios from a **Secondary Market (Capital Markets)** perspective. The pipeline spans from raw data transformation via SQL (DuckDB) to complex Star Schema modeling and high-performance financial computations in Power BI.
+
+**Goal:** Provide actionable insights to optimize Best Execution pricing, evaluate underwriting risks, monitor operational pipeline efficiency, and project 30-year loan amortization cash flows.
 
 ---
 
-## 📸 Dashboard Preview
+## 📊 Dataset Context & Business Scenario
+> **⚠️ Privacy & Confidentiality Note:** 
+> The `.csv` datasets provided in this repository are **synthetic datasets sourced from DataCamp**. They do not contain any real borrower or corporate financial data.
 
-### Page 1: Executive Summary & Profitability
+The simulated business scenario represents a **US-Based Mortgage Lender**. The dataset covers:
+- **Transactional Data:** Simulated loan originations, pricing bids from various investors (e.g., Storgan Manley, Golden Sachs), and UMBS securitization prices.
+- **Risk Profiles:** Borrower DTI (Debt-to-Income), LTV (Loan-to-Value), and FICO credit scores.
+- **Operational Data:** Processing times (Audit & Custodian Turnaround Time) for operational capacity tracking.
+
+---
+
+## 💡 Business Questions & Analytical Solutions
+
+A data dashboard is only as valuable as the business problems it solves. This project was designed to answer critical questions across four key domains:
+
+### 1. Profitability & Trading Optimization (Executive Summary)
 ![Executive Summary](assets/page1_executive_summary.png)
+**Business Question:** *How do we maximize profit margins for each loan we originate?*
+**Solution:** The dashboard features a **Best Execution Engine** that dynamically compares 5 different investor Whole Loan bids against the current UMBS (Securitization) price. By automatically identifying the most profitable exit strategy, the business can capture maximum revenue. The accompanying Waterfall chart traces the exact margin components from Trade Premium down to Net Profit.
 
-### Page 2: Risk & Underwriting Analysis
+### 2. Risk & Underwriting (Page 2)
 ![Risk & Underwriting](assets/page2_risk_underwriting.png)
+**Business Question:** *Are we originating loans within safe regulatory boundaries, and where are our highest risk concentrations?*
+**Solution:** The **Risk Heatmap** and distribution histograms allow risk officers to instantly spot loans exceeding Qualified Mortgage (43% DTI) limits or requiring PMI (80% LTV). The 100% Stacked FICO Tier chart continuously monitors the credit quality of the portfolio, preventing the accumulation of high-risk subprime debt (NPL).
 
-### Page 3: Pipeline & Operational Efficiency
+### 3. Operational Efficiency & SLAs (Page 3)
 ![Pipeline Efficiency](assets/page3_pipeline_efficiency.png)
+**Business Question:** *Where are the bottlenecks in our loan processing, and are we meeting our Service Level Agreements (SLAs)?*
+**Solution:** The **Turnaround Time (TAT) metrics** and real-time SLA gauges track the speed of Audit and Custodian processing. If the Audit TAT exceeds the 5-day target, management can instantly identify the backlog by loan purpose and reallocate staff to prevent funding delays.
 
-### Page 4: Loan Amortization & Cash Flow
+### 4. Cash Flow Forecasting (Page 4)
 ![Loan Amortization](assets/page4_loan_amortization.png)
+**Business Question:** *What does our portfolio's principal paydown and cash flow trajectory look like over the next 30 years?*
+**Solution:** The 360-month **Amortization Curve** projects future balances and principal reduction. By utilizing mathematically optimized financial DAX functions, stakeholders can instantly forecast long-term cash flow scenarios across the entire portfolio.
 
 ---
 
-## 🛠️ Tech Stack
+## 🧠 Data Architecture & Advanced DAX
 
-| Layer | Technology |
-|---|---|
-| **ETL / Data Transformation** | SQL (DuckDB), Python |
-| **Data Visualization** | Power BI Desktop |
-| **Data Modeling** | Star Schema (Fact & Dimension Tables) |
+### 1. Data Modeling & Architecture
+![Data Model](assets/data_model.png)
 
----
+#### 🟢 Architecture Optimization & Trade-offs
+In the current implementation, the data model utilizes a **1-to-1 Relationship** (linked by `loan_id`) across multiple fact and dimension tables. 
+- **Why it was built this way:** This modular approach allows for rapid prototyping and compartmentalized logic during the initial development phase, making it easier to audit individual business domains (e.g., Risk vs. Trading).
+- **Enterprise Scalability (Kimball Methodology):** To scale this for an enterprise-level data warehouse, this model should be optimized into a true **Star Schema**. By consolidating static borrower/property attributes into a central `dim_loan` (Degenerate Dimension) and numeric metrics into a unified `fact_loan_metrics` table, we can eliminate cross-filtering overhead in Power BI, drastically improving DAX query performance over millions of rows.
 
-## 🏗️ Data Architecture (Star Schema)
+### 2. Advanced DAX & Financial Logic
+To ensure instant rendering and accurate financial forecasting, several advanced DAX techniques were implemented:
 
-```mermaid
-erDiagram
-    fact_trading ||--o{ dim_borrower : "loan_id"
-    fact_trading ||--o{ dim_property : "loan_id"
-    fact_trading ||--|| fact_pipeline : "loan_id"
-    fact_trading ||--|| loan_balances : "loan_id"
+- **O(1) Amortization Performance:** Replaced resource-heavy nested `SUMX` iterative loops with highly optimized, closed-form financial DAX functions (`PV()`, `PMT()`, `PPMT()`, `IPMT()`). This architectural decision reduced calculation time from exponential `O(N^2)` to constant time `O(1)`, allowing instant 360-month amortization projections.
+- **Waterfall Profit Breakdown:** Implemented a disconnected dimension table to construct a dynamic Waterfall chart, allowing users to trace revenue flow step-by-step.
 
-    fact_trading {
-        string loan_id PK
-        double loan_amount
-        double interest_rate
-        int loan_term
-        string best_execution_method
-        double best_execution_price
-        double realized_gross_profit
-        double profit_variance
-    }
-
-    dim_borrower {
-        string loan_id PK
-        double dti_ratio
-        double median_fico_score
-        string fico_tier
-        string occupancy_type
-    }
-
-    dim_property {
-        string loan_id PK
-        string state_code
-        double ltv_ratio
-        string ltv_tier
-    }
-
-    fact_pipeline {
-        string loan_id PK
-        int audit_tat_days
-        int custodian_tat_days
-    }
-
-    loan_balances {
-        string loan_id PK
-        double current_balance
-        double principal_interest_payment
-    }
-```
+### 3. Automated ETL Process (DuckDB)
+- Utilized an **AI-generated Python script** (`run_etl.py`) executing **DuckDB SQL** to transform raw `.csv` extracts into an analytical model.
+- **Data Cleansing:** Computed Best Execution Pricing dynamically using `GREATEST()` and `CASE` logic. Calculated regulatory metrics (DTI and LTV ratios) and categorized them into risk tiers.
 
 ---
 
-## 📈 Key Features by Page
-
-### Page 1: Executive Summary & Profitability
-- **Best Execution Engine:** Compares Securitization (UMBS) vs Whole Loan Sale pricing to find the highest return for each loan
-- **Waterfall Chart:** Revenue breakdown using a Disconnected Table technique (Trade Premium → Origination Charges → Lender Credits → Net Profit)
-- **Profit Variance Tracking:** Actual Realized Profit vs Target Profit over time
-
-### Page 2: Risk & Underwriting Analysis
-- **DTI & LTV Histograms:** Distribution analysis with regulatory threshold lines (QM 43% DTI, PMI 80% LTV)
-- **FICO Tier Breakdown:** 100% Stacked chart showing credit quality composition by loan purpose
-- **Risk Heatmap Matrix:** State-level risk concentration with conditional formatting
-
-### Page 3: Pipeline & Operational Efficiency
-- **Turnaround Time (TAT) Analysis:** Audit and Custodian processing speed by loan purpose
-- **Gauge Chart:** Real-time SLA monitoring (Audit TAT vs 5-day target)
-- **Monthly Trend:** Capacity planning insights for identifying seasonal bottlenecks
-
-### Page 4: Loan Amortization & Cash Flow
-- **30-Year Projection:** Amortization schedule using `PV()`, `PMT()`, `PPMT()`, `IPMT()` DAX functions
-- **O(1) Performance Optimization:** Replaced nested SUMX loops with closed-form financial functions for instant rendering
-- **Balance Burn-Down Curve:** Area chart showing portfolio principal reduction over 360 months
+## 🛠️ Technology Stack
+- **Database & ETL Engine:** DuckDB (In-Process SQL OLAP)
+- **ETL Process:** Python & SQL
+- **Data Visualization:** Power BI Desktop
+- **Data Modeling:** Star Schema (Fact & Dimension Tables)
+- **Languages:** SQL, Python, DAX
 
 ---
 
-## 🔧 ETL Pipeline
+## 📁 Repository Structure
 
-The raw Excel datasets are transformed into a clean Star Schema using **DuckDB SQL**:
-
-```
-Raw Excel Files (6 tables)
-    │
-    ▼  [convert_excel_to_csv.py]
-Raw CSV Files (raw_data/)
-    │
-    ▼  [sql/mortgage_etl.sql via DuckDB]
-Star Schema CSV Files (processed_data/)
-    │
-    ▼  [Power BI Import]
-Dashboard
-```
-
-**Key Transformations:**
-- **Best Execution Pricing:** `GREATEST()` across 5 investor bids vs UMBS price
-- **DTI Calculation:** `(Monthly Debt + P&I Payment) / (Annual Income / 12) × 100`
-- **LTV Calculation:** `(Loan Amount / Property Value) × 100` with risk tier classification
-- **TAT Computation:** `DATE_DIFF('day', start_date, end_date)` for Audit and Custodian stages
-
----
-
-## 📂 Project Structure
-
-```
-04-powerbi-mortgage-capital-markets-dashboard/
-├── README.md                          # This file
-├── assets/                            # Dashboard page screenshots
-│   ├── page1_executive_summary.png
-│   ├── page2_risk_underwriting.png
-│   ├── page3_pipeline_efficiency.png
-│   └── page4_loan_amortization.png
-├── raw_data/                          # Original CSV data (6 tables)
-│   ├── loan_data.csv
-│   ├── loan_bids.csv
-│   ├── loan_balances.csv
-│   ├── loan_status.csv
-│   ├── target_profit.csv
-│   ├── umbs_prices.csv
-│   └── raw_data_dictionary.md
-├── sql/
-│   └── mortgage_etl.sql              # DuckDB ETL pipeline
-├── processed_data/                    # Star Schema output (4 tables)
-│   ├── fact_trading.csv
-│   ├── dim_borrower.csv
-│   ├── dim_property.csv
-│   └── fact_pipeline.csv
-├── convert_excel_to_csv.py            # Raw data converter
-├── run_etl.py                         # ETL runner script
-└── Mortgage_Trading_Premium_Theme.json # Power BI custom theme
-```
-
----
-
-*Created by Sirawit Techachaikulsiri*
+- `/04-powerbi-mortgage-capital-markets-dashboard/`
+  - `README.md` - Project Documentation
+  - `Mortgage_Trading_Premium_Theme.json` - Power BI Custom Theme
+  - `convert_excel_to_csv.py` - Raw Data Converter Script
+  - `run_etl.py` - ETL Runner Script
+  - `/assets/` - Dashboard page screenshots and Data Model
+  - `/raw_data/` - Original CSV datasets (6 tables)
+  - `/sql/` - DuckDB ETL pipeline scripts
+  - `/processed_data/` - Cleansed Star Schema output for Power BI (4 tables)

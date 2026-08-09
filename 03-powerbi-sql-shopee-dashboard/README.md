@@ -1,6 +1,9 @@
 # 🛒 Shopee E-Commerce Sales & Ads Performance Analytics
 **End-to-End Data Pipeline & Interactive Power BI Dashboard**
 
+> **🚀 Live Interactive Dashboard:** 
+> You can interact with the live dashboard directly here: **[View Shopee PowerBI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiNjFhMjI0ZjgtYzkzMi00MDFlLWJhMDYtNWFjZDMwMjM0MTQyIiwidCI6IjQ0ZTE2M2UzLTQxYzctNDg1Ny05YWJlLWNlMzdiNDdlNTExNiIsImMiOjEwfQ%3D%3D)**
+
 ![Shopee Dashboard Preview](images/dashboard_preview.png)
 
 ## 📌 Project Overview
@@ -102,6 +105,3 @@ The final Power BI dashboard utilizes a premium dark-mode aesthetic to reduce ey
   - `fact_order.csv` - Transactional Fact Table
   - `fact_ad.csv` - Advertising Fact Table
   - `dim_product.csv` - Product Dimension Table
-
-> **🚀 Live Interactive Dashboard:** 
-> You can interact with the live dashboard directly here: **[View Shopee PowerBI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiNjFhMjI0ZjgtYzkzMi00MDFlLWJhMDYtNWFjZDMwMjM0MTQyIiwidCI6IjQ0ZTE2M2UzLTQxYzctNDg1Ny05YWJlLWNlMzdiNDdlNTExNiIsImMiOjEwfQ%3D%3D)**
