@@ -1,0 +1,48 @@
+{
+    "name": "Mortgage Capital Markets Dark Premium",
+    "dataColors": [
+        "#00D4AA", "#8B5CF6", "#F59E0B", "#EF4444", "#3B82F6",
+        "#EC4899", "#14B8A6", "#F97316", "#6366F1", "#10B981"
+    ],
+    "background": "#0F172A",
+    "foreground": "#E2E8F0",
+    "tableAccent": "#00D4AA",
+    "visualStyles": {
+        "*": {
+            "*": {
+                "background": [{"color": {"solid": {"color": "#1E293B"}}}],
+                "border": [{"color": {"solid": {"color": "#334155"}}}],
+                "outlineColor": [{"solid": {"color": "#334155"}}],
+                "titleColor": [{"solid": {"color": "#F8FAFC"}}],
+                "fontColor": [{"solid": {"color": "#CBD5E1"}}]
+            }
+        },
+        "page": {
+            "*": {
+                "background": [{"color": {"solid": {"color": "#0F172A"}}, "transparency": 0}]
+            }
+        }
+    },
+    "textClasses": {
+        "callout": {
+            "fontSize": 28,
+            "fontFace": "Segoe UI Semibold",
+            "color": "#F8FAFC"
+        },
+        "title": {
+            "fontSize": 14,
+            "fontFace": "Segoe UI Semibold",
+            "color": "#94A3B8"
+        },
+        "header": {
+            "fontSize": 12,
+            "fontFace": "Segoe UI",
+            "color": "#CBD5E1"
+        },
+        "label": {
+            "fontSize": 10,
+            "fontFace": "Segoe UI",
+            "color": "#94A3B8"
+        }
+    }
+}

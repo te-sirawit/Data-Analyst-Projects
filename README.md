@@ -9,6 +9,7 @@ Welcome to my Data Analytics Portfolio! This repository contains a collection of
 | **1. [Shopee Customer & Marketing Analytics](01-sql-shopee-customer-analytics)** | **SQL** | RFM Customer Segmentation, Marketing ROI Optimization (Break-even ROAS) |
 | **2. [Shopee Sales & Operations Analytics](02-sql-shopee-sales-analytics)** | **SQL** | ETL Data Pipeline, Seasonality Analysis, Moving Averages (Window Functions) |
 | **3. [Shopee E-Commerce Performance Dashboard](03-powerbi-sql-shopee-dashboard)** | **Power BI**, **SQL**, **Python** | End-to-end Star Schema Data Modeling, Advanced DAX (Dynamic Time Intelligence), Interactive Dashboards |
+| **4. [Mortgage Capital Markets Dashboard](04-powerbi-mortgage-capital-markets-dashboard)** | **Power BI**, **SQL (DuckDB)**, **Python** | Best Execution Pricing, 30-Year Amortization Projection, Risk & Underwriting Analysis |
 
 ---
 
@@ -37,6 +38,14 @@ Welcome to my Data Analytics Portfolio! This repository contains a collection of
   - Designed an optimized **Star Schema** to connect Fact tables (Orders, Ads) with Dimension tables (Products, Calendar).
   - Developed Advanced DAX measures for **Dynamic Time Intelligence (`ISINSCOPE`)** to automatically switch between MoM and YoY growth.
   - Tracked Core Advertising KPIs such as **ROAS**, **CTR**, and **CPA**.
+
+### [04. Mortgage Capital Markets Dashboard](04-powerbi-mortgage-capital-markets-dashboard)
+*An advanced Power BI dashboard analyzing mortgage loan portfolios from a Secondary Market perspective, complete with a DuckDB SQL ETL pipeline.*
+- **Tech Stack:** Power BI, SQL (DuckDB), Python
+- **Key Analyses & Features:**
+  - **Best Execution Engine:** Dynamic pricing comparison between Securitization (UMBS) and Whole Loan sales.
+  - **30-Year Amortization Projection:** O(1) performance optimization using closed-form financial DAX functions (`PV`, `PMT`).
+  - **Risk & Operations Metrics:** Monitored DTI, LTV, FICO scores, and tracked Pipeline Turnaround Times (TAT) against internal SLAs.
 
 ---
 *Created by Sirawit Techachaikulsiri*
