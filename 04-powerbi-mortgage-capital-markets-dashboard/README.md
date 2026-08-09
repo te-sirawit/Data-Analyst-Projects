@@ -9,16 +9,16 @@ An advanced Power BI dashboard analyzing mortgage loan portfolios from a **Secon
 ## 📸 Dashboard Preview
 
 ### Page 1: Executive Summary & Profitability
-![Executive Summary](screenshots/page1_executive_summary.png)
+![Executive Summary](assets/page1_executive_summary.png)
 
 ### Page 2: Risk & Underwriting Analysis
-![Risk & Underwriting](screenshots/page2_risk_underwriting.png)
+![Risk & Underwriting](assets/page2_risk_underwriting.png)
 
 ### Page 3: Pipeline & Operational Efficiency
-![Pipeline Efficiency](screenshots/page3_pipeline_efficiency.png)
+![Pipeline Efficiency](assets/page3_pipeline_efficiency.png)
 
 ### Page 4: Loan Amortization & Cash Flow
-![Loan Amortization](screenshots/page4_loan_amortization.png)
+![Loan Amortization](assets/page4_loan_amortization.png)
 
 ---
 
@@ -136,7 +136,7 @@ Dashboard
 ```
 04-powerbi-mortgage-capital-markets-dashboard/
 ├── README.md                          # This file
-├── screenshots/                       # Dashboard page screenshots
+├── assets/                            # Dashboard page screenshots
 │   ├── page1_executive_summary.png
 │   ├── page2_risk_underwriting.png
 │   ├── page3_pipeline_efficiency.png
